@@ -51,7 +51,7 @@ public class Main {
 			}
 			androidOptions.configure(parser);
 
-			OptionSpec<File> mappingArg = parser.acceptsAll(Arrays.asList("proguard-mapping", "symbols-file")).withRequiredArg().ofType(File.class);
+			OptionSpec<File> mappingArg = parser.accepts("symbols-file").withRequiredArg().ofType(File.class);
 			OptionSpec<String> apiKeyArg = parser.accepts("api-key", "Your API application key. See https://app.testfairy.com/settings for details").withRequiredArg();
 			OptionSpec<File> inputArg = parser.nonOptions("APK or IPA file data").ofType(File.class);
 			OptionSpec<Void> help = parser.acceptsAll(Arrays.asList("h", "?", "help"), "Show TestFairy uploader usage").forHelp();
