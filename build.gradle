@@ -2,7 +2,7 @@ apply plugin: 'java'
 
 repositories {
 	jcenter()
-	maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+	mavenCentral()
 }
 
 jar {
@@ -17,7 +17,7 @@ jar {
 }
 
 dependencies {
-	compile 'com.testfairy:testfairy-uploader:1.0.0-SNAPSHOT'
+	compile 'com.testfairy:testfairy-uploader:1.0.0'
 	compile 'org.apache.commons:commons-compress:1.10'
 	compile 'commons-io:commons-io:2.4'
 	compile 'net.sf.jopt-simple:jopt-simple:4.9'
