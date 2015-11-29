@@ -6,6 +6,7 @@ repositories {
 }
 
 jar {
+	archiveName="testfairy-uploader.jar"
 	from {
 		(configurations.runtime).collect {
 			it.isDirectory() ? it : zipTree(it)
