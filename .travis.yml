@@ -13,3 +13,4 @@ deploy:
   on:
     repo: testfairy/testfairy-uploader-cli
   tags: true
+  all_branches: true
