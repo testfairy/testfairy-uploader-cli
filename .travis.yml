@@ -1,14 +1,14 @@
 language: java
 script:
-- ./gradlew jar test
+  - ./gradlew jar test
+before_deploy:
+  - zip -j9 testfairy-uploader-${TRAVIS_TAG}.zip "build/libs/testfairy-uploader.jar" "testfairy-uploader" "testfairy-uploader.bat"
 deploy:
   provider: releases
   api_key:
     secure: GxJjHuHDxqyW9EEs/kzOptihEVVkzWOwYlaMeBiiXZMBFjM8q4u78FrAw6ahbFUak+/b+Qsm/UhYLjX8Pea0QvY6If3YsBlVe4qetormSp0Z0dtxpA0AFpcVh1sLAfThmVHAVgXdq6dpPswoL958TEwZI4S/Jej1H6/4cXL2J6/+aHRevJncRdBZ4Tct1igzgfNTHx1q/DgXO7ZIzOM2QOi1liKqzGKIiMk6lLJQI8YE18TSyQGYKB4PQteHzpKbd/IKoaMIB4YvRDbj89QJWm6xc+Gr8LVmkaBWfGnfG9N3gYByi1ID8kTtzkz23BAixV+xT0nQPyrkTiWmjwiibT80V5YrAZ+qPtUHAQVnLvlsYiw/vz7Ra57/wyreKVOM1yiZR/b8W3/JwBrQSOpRwPDdZ7ytsdMMzbZNOCiSsjiQYxc7wp90RDI1Gkr6Jo2R6vwowNkM6xc6cvI4pLfLmVHm8iIBD2ILQkcKCf+SSxba/qrzb9CuVWA3L1SuSaGTTswdXgWm9KQVP9cfDH+MWOiPjmszHB/IF5BW+zNGfBE8HbRN2djztWpcQIw+uygdV0q34I8XpFP50VYM50xcpGgqrucrIGcPUEkqZLUScXgXx4rqa63IxZfJ60pZ5U/GvISgcxu6IIhTOI4FmlhDVgKwZOVPPWDo7CARaS84XBs=
   file:
-    - build/libs/testfairy-uploader.jar
-    - testfairy-uploader
-    - testfairy-uploader.bat
+    - testfairy-uploader-${TRAVIS_TAG}.zip
   skip_cleanup: true
   on:
     repo: testfairy/testfairy-uploader-cli
