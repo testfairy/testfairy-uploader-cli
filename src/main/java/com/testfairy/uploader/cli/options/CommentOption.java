@@ -27,7 +27,6 @@ public class CommentOption implements OptionsArg {
 		if (StringUtils.isEmpty(value))
 			return builder;
 
-
 		return addComment(builder, value);
 	}
 

@@ -17,13 +17,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class Main {
-	private static final int EXIT_SUCCESS = 0;
-	private static final int EXIT_NO_API_KEY = -1;
-	private static final int EXIT_INVALID_API_KEY = -2;
-	private static final int EXIT_NO_ARTIFACT_FILE = -3;
-	private static final int EXIT_INVALID_ARTIFACT_FILE = -4;
-	private static final int EXIT_INVALID_ARTIFACT_FILE_TYPE = -5;
-	private static final int EXIT_UNEXPECTED_EXCEPTION = -5;
+	static final int EXIT_SUCCESS = 0;
+	static final int EXIT_NO_API_KEY = -1;
+	static final int EXIT_INVALID_API_KEY = -2;
+	static final int EXIT_NO_ARTIFACT_FILE = -3;
+	static final int EXIT_INVALID_ARTIFACT_FILE = -4;
+	static final int EXIT_INVALID_ARTIFACT_FILE_TYPE = -5;
+	static final int EXIT_UNEXPECTED_EXCEPTION = -6;
 
 	private final List<OptionsArg> OPTION_ARGS = Arrays.asList(
 		new AnonymousOption(),

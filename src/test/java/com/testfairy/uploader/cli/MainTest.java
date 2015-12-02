@@ -19,57 +19,85 @@ public class MainTest {
 
 	@Test
 	public void returns_error_when_file_does_not_exist() {
-		assertEquals(-1, run("/Users/downloads/SampleApp.apk"));
+		assertEquals(Main.EXIT_NO_API_KEY, run("/Users/downloads/SampleApp.apk"));
 	}
 
 	@Test
 	public void returns_when_no_file_is_given() {
-		assertEquals(-1, run(""));
+		assertEquals(Main.EXIT_NO_API_KEY, run(""));
 	}
 
 	@Test
 	public void returns_when_no_file_is_given_but_contains_arguments() {
-		assertEquals(-3, run("--api-key=" + API_KEY));
+		assertEquals(Main.EXIT_NO_ARTIFACT_FILE, run("--api-key=" + API_KEY));
 	}
 
 	@Test
 	public void returns_error_when_file_does_not_exist_but_contains_arguments() {
-		assertEquals(-4, run("--api-key=" + API_KEY + " /Users/downloads/SampleApp.apk"));
+		assertEquals(Main.EXIT_INVALID_ARTIFACT_FILE, run("--api-key=" + API_KEY + " /Users/downloads/SampleApp.apk"));
 	}
 
 	@Test
 	public void returns_error_when_file_is_invalid() {
-		assertEquals(-5, run("--api-key=" + API_KEY + " " + INVALID_FILE));
+		assertEquals(Main.EXIT_INVALID_ARTIFACT_FILE_TYPE, run("--api-key=" + API_KEY + " " + INVALID_FILE));
 	}
 
 	@Test
 	public void returns_error_when_api_key_is_missing() {
-		assertEquals(-1, run(IPA_PATH));
+		assertEquals(Main.EXIT_NO_API_KEY, run(IPA_PATH));
 	}
 
 	@Test
 	public void returns_error_when_api_key_is_empty() {
-		assertEquals(-3, run("--api-key " + IPA_PATH));
+		assertEquals(Main.EXIT_NO_ARTIFACT_FILE, run("--api-key " + IPA_PATH));
 	}
 
 	@Test
 	public void returns_success_when_viewing_usage() {
-		assertEquals(0, run("--help"));
+		assertEquals(Main.EXIT_SUCCESS, run("--help"));
+	}
+
+	@Test
+	public void returns_error_when_watermarking_ios_builds() {
+		assertEquals(Main.EXIT_UNEXPECTED_EXCEPTION, run("--watermark --api-key=" + API_KEY + " " + IPA_PATH));
+	}
+
+	@Test
+	public void returns_error_when_anonymous_ios_builds() {
+		assertEquals(Main.EXIT_UNEXPECTED_EXCEPTION, run("--anonymous --api-key=" + API_KEY + " " + IPA_PATH));
 	}
 
 	@Test
 	public void can_upload_ios_builds() {
-		assertEquals(0, run("--api-key=" + API_KEY + " " + IPA_PATH));
+		assertEquals(Main.EXIT_SUCCESS, run("--api-key=" + API_KEY + " " + IPA_PATH));
 	}
 
 	@Test
 	public void can_upload_android_builds_signed() {
-		assertEquals(0, run("--instrumentation=on --keystore=" + KEYSTORE_PATH + " --alias=" + KEYSTORE_ALIAS + " --storepass=" + KEYSTORE_PASSWORD + " --comment=\"Cowabunga\" --metrics=memory,cpu,network --api-key=" + API_KEY + " " + APK_PATH));
+		assertEquals(Main.EXIT_SUCCESS, new Main().execute(new String[] {
+			"--watermark",
+			"--video=on",
+			"--video-quality=high",
+			"--tester-group=group",
+			"--anonymous",
+			"--auto-update",
+			"--max-duration=20m",
+			"--metrics=cpu,memory,opengl,memory,network,phone-signal,logcat,gps,battery,mic,wifi",
+			"--notify",
+			"--video-rate=1.0",
+			"--instrumentation=on",
+			"--keystore=" + KEYSTORE_PATH,
+			"--alias=" + KEYSTORE_ALIAS,
+			"--storepass=" + KEYSTORE_PASSWORD,
+			"--comment=\"Cowabunga\"",
+			"--api-key=" +API_KEY,
+			APK_PATH
+		}));
 	}
 
 	@Test
 	public void can_upload_android_builds_unsigned() {
-		assertEquals(0, run("--instrumentation=off --comment=@" + COMMIT_MESSAGE_FILE_PATH + " --metrics=memory,cpu,network --api-key=" + API_KEY + " " + APK_PATH));
+		assertEquals(Main.EXIT_SUCCESS, run("--instrumentation=off --comment=@" + COMMIT_MESSAGE_FILE_PATH + " --metrics=memory,cpu,network --api-key=" + API_KEY + " " + APK_PATH));
 	}
 
 	private int run(String input) {
