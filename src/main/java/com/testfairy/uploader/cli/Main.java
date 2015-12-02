@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Main {
@@ -30,12 +31,20 @@ public class Main {
 		new CommentOption(),
 		new FramesPerSecondOption(),
 		new MaxDurationOption(),
-		new MetricsOption(),
 		new NotifyOption(),
 		new TestersOption(),
 		new VideoRecordingOption(),
 		new VideoQualityOption(),
 		new WatermarkOption()
+	);
+
+	private final List<AndroidOptions> ANDROID_OPTIONS = Arrays.asList(
+		new KeystoreOption(),
+		new MetricsOption()
+	);
+
+	private final List<IOSOptions> IOS_OPTIONS = Collections.<IOSOptions>singletonList(
+		new MetricsOption()
 	);
 
 	public static void main(String[] args) {
@@ -44,12 +53,16 @@ public class Main {
 
 	int execute(String[] args) {
 		try {
-			AndroidOptions androidOptions = new AndroidOptions();
 			OptionParser parser = new OptionParser();
-			for (OptionsArg optionsArg : OPTION_ARGS) {
-				optionsArg.configure(parser);
+			for (OptionsArg options : OPTION_ARGS) {
+				options.configure(parser);
 			}
-			androidOptions.configure(parser);
+			for (AndroidOptions options : ANDROID_OPTIONS) {
+				options.configure(parser);
+			}
+			for (IOSOptions options : IOS_OPTIONS) {
+				options.configure(parser);
+			}
 
 			OptionSpec<File> mappingArg = parser.accepts("symbols-file").withRequiredArg().ofType(File.class);
 			OptionSpec<String> apiKeyArg = parser.accepts("api-key", "Your API application key. See https://app.testfairy.com/settings for details").withRequiredArg();
@@ -111,14 +124,19 @@ public class Main {
 					.setApkPath(input.getPath())
 					.setProguardMapPath(mapping == null ? null : mapping.getPath())
 					.setOptions(options == null ? null : options.build());
-				androidOptions.apply(arguments, android);
+				for (AndroidOptions androidOptions : ANDROID_OPTIONS) {
+					androidOptions.apply(arguments, android);
+				}
 				uploader = android.build();
 			} else if (AppUtils.isAppleIPA(files)) {
-				uploader = new IOSUploader.Builder(api)
+				 IOSUploader.Builder ios = new IOSUploader.Builder(api)
 					.setIpaPath(input.getPath())
 					.setSymbolsPath(mapping == null ? null : mapping.getPath())
-					.setOptions(options == null ? null : options.build())
-					.build();
+					.setOptions(options == null ? null : options.build());
+				for (IOSOptions iosOptions : IOS_OPTIONS) {
+					iosOptions.apply(arguments, ios);
+				}
+				uploader = ios.build();
 			}
 
 			if (uploader == null) {
@@ -155,7 +173,6 @@ public class Main {
 		} catch (Exception exception) {
 			System.err.println("Unexpected Failure");
 			System.err.println(exception.getMessage());
-			exception.printStackTrace();
 			return EXIT_UNEXPECTED_EXCEPTION;
 		}
 	}

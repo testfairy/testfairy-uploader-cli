@@ -10,7 +10,7 @@ class AppUtils {
 	 *
 	 * @return boolean
 	 */
-	public static boolean isAndroidAPK(List<String> files) throws IOException {
+	public static boolean isAndroidAPK(List<String> files) {
 		return (files.contains("AndroidManifest.xml") && files.contains("classes.dex"));
 	}
 
@@ -21,23 +21,13 @@ class AppUtils {
 	 * @param files
 	 * @return boolean
 	 */
-	public static boolean isAppleIPA(List<String> files) throws IOException {
-
+	public static boolean isAppleIPA(List<String> files) {
 		for (String file: files) {
 			if (file.startsWith("Payload/") && file.contains(".app/")) {
 				return true;
 			}
 		}
-		return false;
-	}
 
-	public static boolean isMacOSXApp(List<String> files) {
-
-		for (String file: files) {
-			if (file.startsWith("Applications/") && file.contains(".app/") && file.endsWith("Info.plist")) {
-				return true;
-			}
-		}
 		return false;
 	}
 }

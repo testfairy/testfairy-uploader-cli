@@ -1,5 +1,7 @@
 package com.testfairy.uploader.cli.options;
 
+import com.testfairy.uploader.AndroidUploader;
+import com.testfairy.uploader.IOSUploader;
 import com.testfairy.uploader.Metrics;
 import com.testfairy.uploader.Options;
 import com.testfairy.uploader.cli.StringUtils;
@@ -7,7 +9,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
-public class MetricsOption implements OptionsArg {
+public class MetricsOption implements AndroidOptions, IOSOptions {
 
 	private OptionSpec<String> metrics;
 
@@ -17,43 +19,52 @@ public class MetricsOption implements OptionsArg {
 	}
 
 	@Override
-	public Options.Builder apply(OptionSet optionSet, Options.Builder builder) {
+	public void apply(OptionSet arguments, AndroidUploader.Builder android) {
+		android.setMetrics(extract(arguments));
+	}
+
+	@Override
+	public void apply(OptionSet arguments, IOSUploader.Builder ios) {
+		ios.setMetrics(extract(arguments));
+	}
+
+	private Metrics extract(OptionSet optionSet) {
 		if (! optionSet.has(this.metrics))
-			return builder;
+			return null;
 
 		String all = optionSet.valueOf(this.metrics);
 		if (StringUtils.isEmpty(all))
-			return builder;
+			return null;
 
 		Metrics.Builder metrics = null;
 		for (String metric : all.split(",")) {
 			if ("cpu".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addCpu() : metrics.addCpu();
+				metrics = metrics(metrics).addCpu();
 			} else if ("opengl".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addOpenGl() : metrics.addOpenGl();
+				metrics = metrics(metrics).addOpenGl();
 			} else if ("memory".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addMemory() : metrics.addMemory();
+				metrics = metrics(metrics).addMemory();
 			} else if ("network".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addNetwork() : metrics.addNetwork();
+				metrics = metrics(metrics).addNetwork();
 			} else if ("phone-signal".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addPhoneSignal() : metrics.addPhoneSignal();
+				metrics = metrics(metrics).addPhoneSignal();
 			} else if ("logcat".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addLogcat() : metrics.addLogcat();
+				metrics = metrics(metrics).addLogcat();
 			} else if ("gps".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addGps() : metrics.addGps();
+				metrics = metrics(metrics).addGps();
 			} else if ("battery".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addBattery() : metrics.addBattery();
+				metrics = metrics(metrics).addBattery();
 			} else if ("mic".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addMic() : metrics.addMic();
+				metrics = metrics(metrics).addMic();
 			} else if ("wifi".equals(metric)) {
-				metrics = (metrics == null) ? new Metrics.Builder().addWifi() : metrics.addWifi();
+				metrics = metrics(metrics).addWifi();
 			}
 		}
 
-		if (metrics == null)
-			return builder;
+		return (metrics == null) ? null : metrics.build();
+	}
 
-
-		return builder == null ? new Options.Builder().setMetrics(metrics.build()) : builder.setMetrics(metrics.build());
+	private static Metrics.Builder metrics(Metrics.Builder metrics) {
+		return (metrics == null) ? new Metrics.Builder() : metrics;
 	}
 }
