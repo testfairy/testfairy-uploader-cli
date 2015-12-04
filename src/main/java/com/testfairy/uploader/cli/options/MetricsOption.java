@@ -36,35 +36,6 @@ public class MetricsOption implements AndroidOptions, IOSOptions {
 		if (StringUtils.isEmpty(all))
 			return null;
 
-		Metrics.Builder metrics = null;
-		for (String metric : all.split(",")) {
-			if ("cpu".equals(metric)) {
-				metrics = metrics(metrics).addCpu();
-			} else if ("opengl".equals(metric)) {
-				metrics = metrics(metrics).addOpenGl();
-			} else if ("memory".equals(metric)) {
-				metrics = metrics(metrics).addMemory();
-			} else if ("network".equals(metric)) {
-				metrics = metrics(metrics).addNetwork();
-			} else if ("phone-signal".equals(metric)) {
-				metrics = metrics(metrics).addPhoneSignal();
-			} else if ("logcat".equals(metric)) {
-				metrics = metrics(metrics).addLogcat();
-			} else if ("gps".equals(metric)) {
-				metrics = metrics(metrics).addGps();
-			} else if ("battery".equals(metric)) {
-				metrics = metrics(metrics).addBattery();
-			} else if ("mic".equals(metric)) {
-				metrics = metrics(metrics).addMic();
-			} else if ("wifi".equals(metric)) {
-				metrics = metrics(metrics).addWifi();
-			}
-		}
-
-		return (metrics == null) ? null : metrics.build();
-	}
-
-	private static Metrics.Builder metrics(Metrics.Builder metrics) {
-		return (metrics == null) ? new Metrics.Builder() : metrics;
+		return new Metrics.Builder().addAll(all).build();
 	}
 }
