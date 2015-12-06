@@ -54,6 +54,8 @@ public class Main {
 	int execute(String[] args) {
 		try {
 			OptionParser parser = new OptionParser();
+			parser.formatHelpWith(new UsageFormatter(ANDROID_OPTIONS, IOS_OPTIONS, OPTION_ARGS));
+
 			for (OptionsArg options : OPTION_ARGS) {
 				options.configure(parser);
 			}
@@ -68,11 +70,17 @@ public class Main {
 			OptionSpec<String> apiKeyArg = parser.accepts("api-key", "Your API application key. See https://app.testfairy.com/settings for details").withRequiredArg();
 			OptionSpec<File> inputArg = parser.nonOptions("APK or IPA file data").ofType(File.class);
 			OptionSpec<Void> help = parser.acceptsAll(Arrays.asList("h", "?", "help"), "Show TestFairy uploader usage").forHelp();
+			OptionSpec<Void> version = parser.accepts("version", "Show TestFairy uploader usage");
 
 			OptionSet arguments = parser.parse(args);
 
 			if (arguments.has(help)) {
 				parser.printHelpOn(System.out);
+				return EXIT_SUCCESS;
+			}
+
+			if (arguments.has(version)) {
+				System.out.println(UsageFormatter.version());
 				return EXIT_SUCCESS;
 			}
 

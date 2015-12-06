@@ -58,6 +58,11 @@ public class MainTest {
 	}
 
 	@Test
+	public void returns_success_when_viewing_version() {
+		assertEquals(Main.EXIT_SUCCESS, run("--version"));
+	}
+
+	@Test
 	public void returns_error_when_watermarking_ios_builds() {
 		assertEquals(Main.EXIT_UNEXPECTED_EXCEPTION, run("--watermark --api-key=" + API_KEY + " " + IPA_PATH));
 	}

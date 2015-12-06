@@ -8,6 +8,7 @@ env:
 script:
 - ./gradlew jar cobertura coveralls
 before_deploy:
+- sed -i'' "s/public static final String VERSION = .*/public static final String VERSION = \"${TRAVIS_TAG}\";/g" ./src/main/java/com/testfairy/uploader/cli/Config.java
 - zip -j9 testfairy-uploader-${TRAVIS_TAG}.zip "build/libs/testfairy-uploader.jar"
   "testfairy-uploader" "testfairy-uploader.bat"
 deploy:
