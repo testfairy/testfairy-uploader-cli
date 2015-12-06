@@ -1,22 +1,19 @@
 language: java
 env:
-  matrix:
-  - CI_NAME=travis-ci
-  - TESTFAIRY_UPLOAD_VERSION='1.0.0'
   global:
-    secure: a3Vq3i0ClDu6jg/TAVquAAHnx86eXEKRoyE8A2sUfwIfhUHfAe/uXQvoyl7a7ojDV/SqPMjcnP6lJ5h6n0+JOuAXDgcH8WlY4a7976yhTxdQyf1ULbIkbtLJ6qdedlTbBpdyqvntMhrZ3XskEasHRJYJ8V9r7Y/2rqXmttibP9t+qOwZJ8t2X/cv2uHxLK3RURDPHJMYorQUNBK8IY9SQRPAvTTv9ex2/o7ecszDmO08BE4zBnE7aDVie7+nT8/aRs2hmloPljnad9kR9OI1F222+FzBuWXhftFvRWUKhAf5QXcWcWcQCyWP+iAFQK0GzKPhRRklPuisBjO23V2xw+209VfqBwFp8fEf6AyDi5Y9MGt2/d7+d9fqR73z/8lZoewGcCdCorPk1m/R0FCtoh7I64FPreGQNLolHJMdta1msW8ddf09R/TxJPY7XUdr2cIEPKKxaWvFhcpAleEMAmttpwTaSWb2WGqCwMghgyJDglPG19S7Lf1E50rU3j6oyKX4+OtOWUZv9y1or3VQlFfDQdeTbahqUu9NfI3b3fp2mdtOrQMVadvRvpJJs6pmC4OrmmB/J3zvPuJvRzFFy0hkpV56dxjNNOktR2UKGQin9DX8+MataRGBTZRJHWfdpT2NCVv5BULKSHCN+Sf5F/nKGCriNoZoW7bDWabX8mI=
+    - CI_NAME=travis-ci
+    - TESTFAIRY_UPLOAD_VERSION='1.0.0'
+    - secure: a3Vq3i0ClDu6jg/TAVquAAHnx86eXEKRoyE8A2sUfwIfhUHfAe/uXQvoyl7a7ojDV/SqPMjcnP6lJ5h6n0+JOuAXDgcH8WlY4a7976yhTxdQyf1ULbIkbtLJ6qdedlTbBpdyqvntMhrZ3XskEasHRJYJ8V9r7Y/2rqXmttibP9t+qOwZJ8t2X/cv2uHxLK3RURDPHJMYorQUNBK8IY9SQRPAvTTv9ex2/o7ecszDmO08BE4zBnE7aDVie7+nT8/aRs2hmloPljnad9kR9OI1F222+FzBuWXhftFvRWUKhAf5QXcWcWcQCyWP+iAFQK0GzKPhRRklPuisBjO23V2xw+209VfqBwFp8fEf6AyDi5Y9MGt2/d7+d9fqR73z/8lZoewGcCdCorPk1m/R0FCtoh7I64FPreGQNLolHJMdta1msW8ddf09R/TxJPY7XUdr2cIEPKKxaWvFhcpAleEMAmttpwTaSWb2WGqCwMghgyJDglPG19S7Lf1E50rU3j6oyKX4+OtOWUZv9y1or3VQlFfDQdeTbahqUu9NfI3b3fp2mdtOrQMVadvRvpJJs6pmC4OrmmB/J3zvPuJvRzFFy0hkpV56dxjNNOktR2UKGQin9DX8+MataRGBTZRJHWfdpT2NCVv5BULKSHCN+Sf5F/nKGCriNoZoW7bDWabX8mI=
 script:
 - ./gradlew jar cobertura coveralls
 before_deploy:
 - sed -i'' "s/public static final String VERSION = .*/public static final String VERSION = \"${TRAVIS_TAG}\";/g" ./src/main/java/com/testfairy/uploader/cli/Config.java
-- zip -j9 testfairy-uploader-${TRAVIS_TAG}.zip "build/libs/testfairy-uploader.jar"
-  "testfairy-uploader" "testfairy-uploader.bat"
+- zip -j9 testfairy-uploader-${TRAVIS_TAG}.zip "build/libs/testfairy-uploader.jar" "testfairy-uploader" "testfairy-uploader.bat"
 deploy:
   provider: releases
   api_key:
     secure: GxJjHuHDxqyW9EEs/kzOptihEVVkzWOwYlaMeBiiXZMBFjM8q4u78FrAw6ahbFUak+/b+Qsm/UhYLjX8Pea0QvY6If3YsBlVe4qetormSp0Z0dtxpA0AFpcVh1sLAfThmVHAVgXdq6dpPswoL958TEwZI4S/Jej1H6/4cXL2J6/+aHRevJncRdBZ4Tct1igzgfNTHx1q/DgXO7ZIzOM2QOi1liKqzGKIiMk6lLJQI8YE18TSyQGYKB4PQteHzpKbd/IKoaMIB4YvRDbj89QJWm6xc+Gr8LVmkaBWfGnfG9N3gYByi1ID8kTtzkz23BAixV+xT0nQPyrkTiWmjwiibT80V5YrAZ+qPtUHAQVnLvlsYiw/vz7Ra57/wyreKVOM1yiZR/b8W3/JwBrQSOpRwPDdZ7ytsdMMzbZNOCiSsjiQYxc7wp90RDI1Gkr6Jo2R6vwowNkM6xc6cvI4pLfLmVHm8iIBD2ILQkcKCf+SSxba/qrzb9CuVWA3L1SuSaGTTswdXgWm9KQVP9cfDH+MWOiPjmszHB/IF5BW+zNGfBE8HbRN2djztWpcQIw+uygdV0q34I8XpFP50VYM50xcpGgqrucrIGcPUEkqZLUScXgXx4rqa63IxZfJ60pZ5U/GvISgcxu6IIhTOI4FmlhDVgKwZOVPPWDo7CARaS84XBs=
-  file:
-  - testfairy-uploader-${TRAVIS_TAG}.zip
+  file: testfairy-uploader-${TRAVIS_TAG}.zip
   skip_cleanup: true
   on:
     repo: testfairy/testfairy-uploader-cli
