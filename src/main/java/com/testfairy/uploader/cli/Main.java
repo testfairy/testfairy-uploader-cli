@@ -40,11 +40,13 @@ public class Main {
 
 	private final List<AndroidOptions> ANDROID_OPTIONS = Arrays.asList(
 		new KeystoreOption(),
-		new MetricsOption()
+		new MetricsOption(),
+		new ProxyOptions()
 	);
 
-	private final List<IOSOptions> IOS_OPTIONS = Collections.<IOSOptions>singletonList(
-		new MetricsOption()
+	private final List<IOSOptions> IOS_OPTIONS = Arrays.<IOSOptions>asList(
+		new MetricsOption(),
+		new ProxyOptions()
 	);
 
 	public static void main(String[] args) {
@@ -54,7 +56,7 @@ public class Main {
 	int execute(String[] args) {
 		try {
 			OptionParser parser = new OptionParser();
-			parser.formatHelpWith(new UsageFormatter(ANDROID_OPTIONS, IOS_OPTIONS, OPTION_ARGS));
+			parser.formatHelpWith(new UsageFormatter());
 
 			for (OptionsArg options : OPTION_ARGS) {
 				options.configure(parser);
