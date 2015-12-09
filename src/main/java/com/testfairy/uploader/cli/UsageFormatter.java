@@ -53,6 +53,7 @@ class UsageFormatter implements HelpFormatter {
 		optionRows.add("--alias=STRING", "Keystore alias");
 		optionRows.add("--digestalg=STRING", "Name of digest algorithm");
 		optionRows.add("--sigalg=STRING", "Name of signature algorithm");
+		optionRows.add("--jarsigner-path=PATH", "Path to jarsigner");
 
 		optionRows.add("iOS Options:", "");
 		optionRows.add("--metrics=LIST", "comma-separated list of metrics to record");

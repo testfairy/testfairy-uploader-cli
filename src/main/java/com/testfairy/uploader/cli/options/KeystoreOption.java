@@ -13,6 +13,7 @@ public class KeystoreOption implements AndroidOptions {
 	private OptionSpec<String> storePassword;
 	private OptionSpec<String> digestAlgorithm;
 	private OptionSpec<String> signatureAlgorithm;
+	private OptionSpec<String> jarsignerPath;
 
 	@Override
 	public void configure(OptionParser parser) {
@@ -23,6 +24,7 @@ public class KeystoreOption implements AndroidOptions {
 		storePassword = parser.accepts("storepass", "Password for keystore integrity").withRequiredArg();
 		digestAlgorithm = parser.accepts("digestalg", "Name of digest algorithm").withRequiredArg();
 		signatureAlgorithm = parser.accepts("sigalg", "Name of signature algorithm").withRequiredArg();
+		jarsignerPath = parser.accepts("jarsigner-path", "Path to jarsigner").withRequiredArg();
 	};
 
 	@Override
@@ -49,6 +51,9 @@ public class KeystoreOption implements AndroidOptions {
 
 		if (arguments.has(signatureAlgorithm))
 			android.setSignatureAlgorithm(value(arguments, signatureAlgorithm));
+
+		if (arguments.has(jarsignerPath))
+			android.setJarSignerPath(value(arguments, jarsignerPath));
 	}
 
 	private static String value(OptionSet arguments, OptionSpec<String> option) {
