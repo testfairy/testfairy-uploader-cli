@@ -29,6 +29,7 @@ public class Main {
 		new AnonymousOption(),
 		new AutoUpdateOption(),
 		new CommentOption(),
+		new CustomOption(),
 		new FramesPerSecondOption(),
 		new MaxDurationOption(),
 		new NotifyOption(),

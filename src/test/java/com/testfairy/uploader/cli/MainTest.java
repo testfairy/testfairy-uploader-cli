@@ -95,7 +95,8 @@ public class MainTest {
 			"--alias=" + KEYSTORE_ALIAS,
 			"--storepass=" + KEYSTORE_PASSWORD,
 			"--comment=\"Cowabunga\"",
-			"--api-key=" +API_KEY,
+			"--custom=field1=value1,field2=value2",
+			"--api-key=" + API_KEY,
 			APK_PATH
 		}));
 	}

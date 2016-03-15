@@ -26,6 +26,7 @@ class UsageFormatter implements HelpFormatter {
 		optionRows.add("Options:", "");
 		optionRows.add("--auto-update", "Allows easy upgrade of all users to current version");
 		optionRows.add("--comment=STRING", "Additional release notes for this upload. This text will be added to email notifications. Can also pass @path to text file");
+		optionRows.add("--custom=STRING", "Additional fields for this upload. E.g. --custom=field1=value1,field2=value2");
 		optionRows.add("--max-duration=STRING", "Maximum session recording length, eg 20m or 1h. Default is \"10m\". Maximum 24h");
 		optionRows.add("--notify", "Notify testers of updated build");
 		optionRows.add("--symbols-file=PATH", "Path to symbols or proguard file");
